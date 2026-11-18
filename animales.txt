@@ -1,0 +1,7 @@
+P:¿Es un mamífero?
+P:¿Vive en el agua?
+A:Delfín
+A:Perro
+P:¿Vuela?
+A:Águila
+A:Pingüino
