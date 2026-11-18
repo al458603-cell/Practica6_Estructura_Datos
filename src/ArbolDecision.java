@@ -25,33 +25,126 @@ public class ArbolDecision {
 
     //Ejercicio1
     public boolean esExtendido() {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 1");
-    }
 
+        return(esExtendido(raiz));
+
+    }
+    private boolean esExtendido(BinaryNode<String> r){
+        if(r==null)
+            return true;
+
+        if(r.isLeaf())
+            return true;
+
+        if(!r.hasLeft() || !r.hasRight())
+            return false;
+
+        return (esExtendido(r.left()) && esExtendido(r.right()));
+    }
 
     //Ejercicio2
     public int numAnimales() {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 2");
+        return numAnimales(raiz);
+    }
+
+    private int numAnimales(BinaryNode<String> r) {
+
+        if (r == null) {
+            return 0;
+        }
+
+        if (r.isLeaf()) {
+            return 1;
+        }
+
+        return numAnimales(r.left()) + numAnimales(r.right());
     }
 
 
     //Ejercicio3
     public List<String> animales() {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 3");
+        List<String> lista = new ArrayList<String>();
+        return animales(raiz ,lista);
+    }
+
+    private List<String> animales(BinaryNode<String> r , List<String> lista){
+
+        if(r == null)
+            return lista;
+
+        if(r.isLeaf()){
+            lista.add(r.getData());
+            return lista;
+        }
+
+        animales(r.left(),lista);
+        animales(r.right(), lista);
+
+        return lista;
     }
 
 
 
     //Ejercicio 4
     public List<String> camino (String elem) {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 4");
+        if (elem == null){
+            throw new IllegalArgumentException();
+        }
+
+        List<String> lista = new ArrayList<String>();
+        camino(raiz, lista, elem);
+        return lista;
+    }
+
+    private boolean camino (BinaryNode<String> r, List<String> lista , String elem){
+
+        if(r == null)
+            return false;
+
+        lista.add(r.getData());
+
+        if (r.getData().equals(elem)) {
+            return true;
+        }
+
+        if (camino(r.left(),lista,elem))
+            return true;
+
+        if (camino(r.right(),lista,elem))
+            return true;
+
+        lista.remove(lista.size() - 1);
+
+        return false;
     }
 
 
     //Ejercicio 5
 
     public void aprender (BinaryNode<String> hoja, String animalNuevo, String pregunta, boolean respuestaNuevo) {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 5");
+        //COMPROBCIONES
+        if( hoja == null || !hoja.isLeaf() ){
+            throw new IllegalArgumentException();
+        }
+        if( animalNuevo == null || animalNuevo.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        if( pregunta == null || pregunta.isEmpty() ){
+            throw new IllegalArgumentException();
+        }
+        if (animales().contains(animalNuevo)) {
+            throw new IllegalArgumentException();
+        }
+
+        new BinaryNode<String>(animalNuevo);
+        new BinaryNode<String>(hoja.getData());
+
+        if(respuestaNuevo){}
+
+
+
+        }
+
     }
 
     //Ejercicio 6
