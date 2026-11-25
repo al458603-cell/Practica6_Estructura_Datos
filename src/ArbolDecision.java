@@ -136,26 +136,81 @@ public class ArbolDecision {
             throw new IllegalArgumentException();
         }
 
-        new BinaryNode<String>(animalNuevo);
-        new BinaryNode<String>(hoja.getData());
+        BinaryNode<String> nuevo = new BinaryNode<>(animalNuevo);
+        BinaryNode<String> antiguo = new BinaryNode<>(hoja.getData());
 
-        if(respuestaNuevo){}
+        hoja.setData(pregunta);
 
-
-
+        if (respuestaNuevo) {
+            hoja.setLeft(nuevo);
+            hoja.setRight(antiguo);
+        } else {
+            hoja.setLeft(antiguo);
+            hoja.setRight(nuevo);
         }
-
     }
+
+
 
     //Ejercicio 6
     public List<String> describir(String animal) {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 6");
+        List<String> lista = new ArrayList<String>();
+        describir(raiz, lista, animal);
+        return lista;
+    }
+
+    private boolean describir(BinaryNode<String> r, List<String> lista, String animal) {
+        // Árbol vacío: no está
+        if (r == null) {
+            return false;
+        }
+
+        // Hoja: ¿es el animal buscado?
+        if (r.isLeaf()) {
+            return r.getData().equals(animal);
+        }
+
+        // Pregunta: pruebo por el Sí
+        lista.add(r.getData() + " Sí");
+        if (describir(r.left(), lista, animal)) {
+            return true;
+        }
+        lista.remove(lista.size() - 1);   // no estaba por aquí
+
+        // Pruebo por el No
+        lista.add(r.getData() + " No");
+        if (describir(r.right(), lista, animal)) {
+            return true;
+        }
+        lista.remove(lista.size() - 1);
+
+        return false;
     }
 
 
     //Ejercicio 7
     public String preguntaDiferenciadora(String animal1, String animal2) {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 7");
+        // El mismo animal: nada que diferenciar
+        if (animal1.equals(animal2)) {
+            return null;
+        }
+
+        List<String> camino1 = camino(animal1);
+        List<String> camino2 = camino(animal2);
+
+        // Alguno no está en el árbol
+        if (camino1.isEmpty() || camino2.isEmpty()) {
+            return null;
+        }
+
+        // Avanzo mientras coincidan, sin salirme de ninguna lista
+        int i = 0;
+        while (i < camino1.size() && i < camino2.size() && camino1.get(i).equals(camino2.get(i))) {
+            i++;
+        }
+
+        // La última que coincide
+        return camino1.get(i - 1);
     }
 
 
@@ -173,7 +228,20 @@ public class ArbolDecision {
 
     //Ejercicio 8
     private void guardar(BinaryNode<String> r, PrintWriter out) {
-        throw new UnsupportedOperationException("Falta implementar Ejercicio 8");
+        if (r == null) {
+            return;
+        }
+
+        // Hoja: es un animal
+        if (r.isLeaf()) {
+            out.println("A:" + r.getData());
+            return;
+        }
+
+        // Pregunta: preorden (nodo, izquierda, derecha)
+        out.println("P:" + r.getData());
+        guardar(r.left(), out);
+        guardar(r.right(), out);
     }
 
     // ---------- cargar ----------
